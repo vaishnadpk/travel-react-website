@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import "./Navbar.css";
@@ -17,12 +17,22 @@ function Navbar() {
     }
   };
 
-  window.addEventListener("resize", showButton);
+  useEffect(() => {
+    showButton();
+  }, []);
+
+  useEffect(
+    () => {
+      window.addEventListener("resize", showButton);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [() => window.removeEventListener("resize", showButton)]
+  );
 
   return (
-    <nav className="Navbar">
-      <div className="nav-container">
-        <Link to="/" className="navbar-logo">
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-logo" onClick={closeMobileMenu}>
           TRVL <i className="fab fa-typo3" />
         </Link>
         <div className="menu-icon" onClick={handleClick}>
@@ -53,11 +63,7 @@ function Navbar() {
             </Link>
           </li>
           <li className="nav-item">
-            <Link
-              to="/signup"
-              className="nav-links-mobile"
-              onClick={closeMobileMenu}
-            >
+            <Link to="/signup" className="nav-links" onClick={closeMobileMenu}>
               Sign Up
             </Link>
           </li>
